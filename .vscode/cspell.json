@@ -24,6 +24,7 @@
         "editorconfig",
         "fgrep",
         "printf",
-        "redhat"
+        "redhat",
+        "venv"
     ]
 }
