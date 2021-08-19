@@ -1,0 +1,52 @@
+default_language_version:
+  python: python3.9
+
+minimum_pre_commit_version: 2.14.0
+
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.0.1
+    hooks:
+      - id: check-json
+      - id: check-merge-conflict
+      - id: check-toml
+      - id: check-yaml
+        args:
+          - --unsafe  # needed for parsing CFN
+      - id: end-of-file-fixer
+        exclude: .*\.json-result
+      - id: file-contents-sorter
+        files: |
+          (?x)^(
+            \.gitignore
+          )$
+      - id: pretty-format-json
+        args: [--autofix, --indent, '4']
+        files: |
+          (?x)^(
+            \.vscode/(?!cspell).*\.json
+          )$
+        name: Pretty Format Json (indent=4)
+      - id: pretty-format-json
+        args: [--autofix, --indent, '2']
+        files: |
+          (?x)^(
+            (.*)?(cdk|tsconfig|tslint).json
+          )$
+        name: Pretty Format Json (indent=2)
+      - id: trailing-whitespace
+  - repo: https://github.com/jumanjihouse/pre-commit-hook-yamlfmt
+    rev: 0.1.0
+    hooks:
+      - id: yamlfmt
+        args: [--implicit_start, --mapping, '2', --offset, '2', --sequence, '4']
+        files: |
+          (?x)^(
+            \.github/(?!dependabot).*\.(yaml|yml)|
+            \.markdownlint.yml|
+            \.pre-commit-config.yaml|
+          )$
+  - repo: https://github.com/igorshubovych/markdownlint-cli
+    rev: v0.28.1
+    hooks:
+      - id: markdownlint

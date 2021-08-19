@@ -1,0 +1,10 @@
+{
+    "editor.insertSpaces": true,
+    "editor.rulers": [
+        79,
+        100,
+        120
+    ],
+    "editor.tabSize": 2,
+    "files.insertFinalNewline": true
+}

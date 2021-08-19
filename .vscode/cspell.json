@@ -1,0 +1,29 @@
+{
+    "version": "0.1",
+    "ignorePaths": [
+        "**/.venv/**",
+        "**/node_modules/**",
+        "**/package-lock.json",
+        "**/package.json",
+        "**/poetry.lock"
+    ],
+    "language": "en",
+    "languageSettings": [
+        {
+            "languageId": "toml",
+            "allowCompoundWords": true,
+            "dictionaries": [
+                "python"
+            ]
+        }
+    ],
+    "maxNumberOfProblems": 100,
+    "words": [
+        "autofix",
+        "dependabot",
+        "editorconfig",
+        "fgrep",
+        "printf",
+        "redhat"
+    ]
+}

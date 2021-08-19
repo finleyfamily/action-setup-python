@@ -1,0 +1,18 @@
+{
+  "name": "action-setup-python",
+  "version": "0.0.0",
+  "description": "A composite action for setting up python.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ITProKyle/action-setup-python.git"
+  },
+  "author": "Kyle Finley <kyle@finley.sh>",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/ITProKyle/action-setup-python/issues"
+  },
+  "homepage": "https://github.com/ITProKyle/action-setup-python#readme",
+  "devDependencies": {
+    "cspell": "^5.7.2"
+  }
+}
