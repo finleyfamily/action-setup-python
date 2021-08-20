@@ -42,8 +42,8 @@ runs:
     - id: composite-setup-poetry
       uses: Gr1N/setup-poetry@v7
       with:
-        poetry-preview: ${{ input.poetry-preview }}
-        poetry-version: ${{ input.poetry-version }}
+        poetry-preview: ${{ inputs.poetry-preview }}
+        poetry-version: ${{ inputs.poetry-version }}
     - id: composite-python-venv-cache
       uses: actions/cache@v2
       with:
