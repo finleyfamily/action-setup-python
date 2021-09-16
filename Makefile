@@ -16,8 +16,13 @@ help: ## show this message
 		printf "%s\n" $$help_info; \
 	done
 
+format: format-md ## format files
+
+format-md: ## format markdown files
+	@poetry run pre-commit run mdformat --all-files
+
 run-pre-commit: ## run pre-commit for all files
-	@poetry run pre-commit run -a
+	@poetry run pre-commit run --all-files
 
 setup: setup-poetry setup-pre-commit setup-npm ## setup local dev environment
 

@@ -23,8 +23,14 @@
         "dependabot",
         "editorconfig",
         "fgrep",
+        "frontmatter",
+        "maxlevel",
+        "mdformat",
+        "minlevel",
         "printf",
         "redhat",
-        "venv"
+        "venv",
+        "virtualenvs",
+        "yamlfmt"
     ]
 }

@@ -1,5 +1,5 @@
 name: Setup Python & Poetry
-description: Setup a specific version of Python & poetry.
+description: Setup a specific version of Python & poetry with virtual environment caching.
 author: Kyle Finley
 branding:
   color: purple
@@ -9,11 +9,11 @@ inputs:
   architecture:
     description: The target architecture (x86, x64) of the Python interpreter.
   poetry-preview:
-    description: Allow to install prerelease versions of Poetry
+    description: Allow install of prerelease versions of Poetry.
     required: false
     default: false
   poetry-version:
-    description: Poetry version to use, if version is not provided then latest stable version will be used
+    description: Poetry version to use. If version is not provided then latest stable version will be used.
     required: false
   python-version:
     description: Version range or exact version of a Python version to use, using semver version range syntax.
@@ -24,10 +24,10 @@ inputs:
 
 outputs:
   cache-hit:
-    description: If there was a cache hit for the Python virtual environment.
+    description: Whether there was a cache hit for the Python virtual environment.
     value: ${{ steps.composite-python-venv-cache.outputs.cache-hit }}
   python-version:
-    description: The installed python version. Useful when given a version range as input.
+    description: The installed Python version. Useful when given a version range as input.
     value: ${{ steps.composite-setup-python.outputs.python-version }}
 
 runs:
