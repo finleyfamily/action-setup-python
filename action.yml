@@ -1,0 +1,51 @@
+name: Setup Python & Poetry
+description: Setup a specific version of Python & poetry.
+author: Kyle Finley
+branding:
+  color: purple
+  icon: coffee
+
+inputs:
+  architecture:
+    description: The target architecture (x86, x64) of the Python interpreter.
+  poetry-preview:
+    description: Allow to install prerelease versions of Poetry
+    required: false
+    default: false
+  poetry-version:
+    description: Poetry version to use, if version is not provided then latest stable version will be used
+    required: false
+  python-version:
+    description: Version range or exact version of a Python version to use, using semver version range syntax.
+    default: 3.x
+  token:
+    description: Used to pull python distributions from actions/python-versions. Since there's a default, this is typically not supplied by the user.
+    default: ${{ github.token }}
+
+outputs:
+  cache-hit:
+    description: If there was a cache hit for the Python virtual environment.
+    value: ${{ steps.composite-python-venv-cache.outputs.cache-hit }}
+  python-version:
+    description: The installed python version. Useful when given a version range as input.
+    value: ${{ steps.composite-setup-python.outputs.python-version }}
+
+runs:
+  using: composite
+  steps:
+    - id: composite-setup-python
+      uses: actions/setup-python@v2
+      with:
+        architecture: ${{ inputs.architecture }}
+        python-version: ${{ inputs.python-version }}
+        token: ${{ inputs.token }}
+    - id: composite-setup-poetry
+      uses: Gr1N/setup-poetry@v7
+      with:
+        poetry-preview: ${{ inputs.poetry-preview }}
+        poetry-version: ${{ inputs.poetry-version }}
+    - id: composite-python-venv-cache
+      uses: actions/cache@v2
+      with:
+        path: .venv
+        key: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}

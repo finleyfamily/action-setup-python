@@ -1,4 +1,4 @@
-name: Test => Build => Deploy
+name: Default
 
 
 on: push
@@ -28,3 +28,26 @@ jobs:
         run: poetry run pip --version > /dev/null 2>&1 || rm -rf .venv
       - run: poetry install -vv --remove-untracked
       - uses: pre-commit/action@v2.0.3
+  test-local-action:
+    name: Test Local Action
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.9]
+    steps:
+      - uses: actions/checkout@v2
+      - id: local-action
+        uses: ./
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: check outputs.python-version
+        env:
+          MATRIX_PYTHON_VERSION: ${{ matrix.python-version }}
+          OUTPUTS_PYTHON_VERSION: ${{ steps.local-action.outputs.python-version }}
+        if: '!startsWith(steps.local-action.outputs.python-version, matrix.python-version)'
+        run: |
+          echo "outputs.python-version=${OUTPUTS_PYTHON_VERSION}"
+          echo "matrix.python-version=${MATRIX_PYTHON_VERSION}"
+          exit 1
+      - name: check poetry
+        run: poetry --version
