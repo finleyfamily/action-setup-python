@@ -35,13 +35,14 @@ steps:
 
 ### Inputs
 
-| Key            | Description                                                                                                                          |
-| -------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
-| architecture   | The target architecture (x86, x64) of the Python interpreter.The target architecture (x86, x64) of the Python interpreter.           |
-| poetry-preview | Allow install of prerelease versions of Poetry.                                                                                      |
-| poetry-version | Poetry version to use. If version is not provided then latest stable version will be used.                                           |
-| python-version | Version range or exact version of a Python version to use, using semver version range syntax.                                        |
-| token          | Used to pull python distributions from actions/python-versions. Since there's a default, this is typically not supplied by the user. |
+| Key              | Description                                                                                                                                      |
+| ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
+| architecture     | The target architecture (x86, x64) of the Python interpreter.The target architecture (x86, x64) of the Python interpreter.                       |
+| cache-key-suffix | Temporary input to allow for slight customization of the cache key until full customization can be provided. This will be removed in the future. |
+| poetry-preview   | Allow install of prerelease versions of Poetry.                                                                                                  |
+| poetry-version   | Poetry version to use. If version is not provided then latest stable version will be used.                                                       |
+| python-version   | Version range or exact version of a Python version to use, using semver version range syntax.                                                    |
+| token            | Used to pull python distributions from actions/python-versions. Since there's a default, this is typically not supplied by the user.             |
 
 ### Outputs
 
