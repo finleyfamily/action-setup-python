@@ -41,7 +41,13 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
       - name: check outputs.python-version
-        if: startsWith(steps.local-action.outputs.python-version, matrix.python-version) != 'true'
-        run: exit 1
+        env:
+          MATRIX_PYTHON_VERSION: ${{ matrix.python-version }}
+          OUTPUTS_PYTHON_VERSION: ${{ steps.local-action.outputs.python-version }}
+        if: '!startsWith(steps.local-action.outputs.python-version, matrix.python-version)'
+        run: |
+          echo "outputs.python-version=${OUTPUTS_PYTHON_VERSION}"
+          echo "matrix.python-version=${MATRIX_PYTHON_VERSION}"
+          exit 1
       - name: check poetry
         run: poetry --version
