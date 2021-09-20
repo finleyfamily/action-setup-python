@@ -4,8 +4,8 @@ version: 2
 updates:
   - directory: /
     labels:
-      - dependencies
       - github_actions
+      - maintenance
     open-pull-requests-limit: 5
     package-ecosystem: github-actions
     schedule:
@@ -13,6 +13,9 @@ updates:
       time: "08:00"
       timezone: America/New_York
   - directory: /
+    labels:
+      - javascript
+      - maintenance
     open-pull-requests-limit: 5
     package-ecosystem: npm
     schedule:
@@ -24,7 +27,7 @@ updates:
       - dependency-name: boto3
       - dependency-name: botocore
     labels:
-      - dependencies
+      - maintenance
       - poetry
       - python
     open-pull-requests-limit: 5
