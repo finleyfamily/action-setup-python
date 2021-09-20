@@ -1,5 +1,5 @@
-name: Setup Python & Poetry
-description: Setup a specific version of Python & poetry with virtual environment caching.
+name: Setup Python and Poetry
+description: Setup a specific version of Python & Poetry with virtual environment caching.
 author: Kyle Finley
 branding:
   color: purple
