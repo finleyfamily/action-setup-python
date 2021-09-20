@@ -54,7 +54,7 @@ jobs:
         env:
           CACHE_HIT_VALUE: ${{ steps.local-action.outputs.cache-hit }}
         if: steps.local-action.outputs.cache-hit == 'true'
-        run:
+        run: |
           echo "outputs.cache-hit=${CACHE_HIT_VALUE}"
           exit 1
       - name: check poetry
@@ -68,6 +68,6 @@ jobs:
         env:
           CACHE_HIT_VALUE: ${{ steps.local-action-hit.outputs.cache-hit }}
         if: steps.local-action-hit.outputs.cache-hit != 'true'
-        run:
+        run: |
           echo "outputs.cache-hit=${CACHE_HIT_VALUE}"
           exit 1
