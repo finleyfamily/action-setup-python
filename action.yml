@@ -51,4 +51,4 @@ runs:
       uses: actions/cache@v2
       with:
         path: .venv
-        key: venv-${{ runner.os }}-${{ steps.composite-setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}${{ input.cache-key-suffix }}
+        key: venv-${{ runner.os }}-${{ steps.composite-setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}${{ inputs.cache-key-suffix }}
