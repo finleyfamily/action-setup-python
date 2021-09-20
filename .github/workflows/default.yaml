@@ -39,6 +39,7 @@ jobs:
       - id: local-action
         uses: ./
         with:
+          cache-key-suffix: ${{ github.run_number }}
           python-version: ${{ matrix.python-version }}
       - name: check outputs.python-version
         env:
@@ -49,5 +50,24 @@ jobs:
           echo "outputs.python-version=${OUTPUTS_PYTHON_VERSION}"
           echo "matrix.python-version=${MATRIX_PYTHON_VERSION}"
           exit 1
+      - name: check outputs.cache-hit (miss)
+        env:
+          CACHE_HIT_VALUE: ${{ steps.local-action.outputs.cache-hit }}
+        if: steps.local-action.outputs.cache-hit == 'true'
+        run:
+          echo "outputs.cache-hit=${CACHE_HIT_VALUE}"
+          exit 1
       - name: check poetry
         run: poetry --version
+      - id: local-action-hit
+        uses: ./
+        with:
+          cache-key-suffix: ${{ github.run_number }}
+          python-version: ${{ matrix.python-version }}
+      - name: check outputs.cache-hit (hit)
+        env:
+          CACHE_HIT_VALUE: ${{ steps.local-action-hit.outputs.cache-hit }}
+        if: steps.local-action-hit.outputs.cache-hit != 'true'
+        run:
+          echo "outputs.cache-hit=${CACHE_HIT_VALUE}"
+          exit 1
