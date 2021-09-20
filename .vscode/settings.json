@@ -6,5 +6,6 @@
         120
     ],
     "editor.tabSize": 2,
-    "files.insertFinalNewline": true
+    "files.insertFinalNewline": true,
+    "markdown.extension.toc.updateOnSave": false
 }
