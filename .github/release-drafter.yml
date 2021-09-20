@@ -24,7 +24,7 @@ autolabeler:  # cspell:ignore autolabeler
       - setup.cfg
   - label: release
     branch: [/^(release)\/.*/]
-  - label: workflows
+  - label: github_actions
     files:
       - .github/workflows/*.yml
 categories:
@@ -48,7 +48,7 @@ category-template: >-
 change-template: '- $TITLE @$AUTHOR (#$NUMBER)'
 commitish: master  # cspell:ignore commitish
 exclude-labels:
-  - skip-changelog
+  - changelog:skip
   - release
 name-template: v$RESOLVED_VERSION
 sort-direction: ascending
@@ -60,11 +60,11 @@ template: |
 version-resolver:
   major:
     labels:
-      - major
+      - changelog:major
   minor:
     labels:
-      - minor
+      - changelog:minor
   patch:
     labels:
-      - patch
+      - changelog:patch
   default: patch
