@@ -59,18 +59,6 @@ jobs:
           exit 1
       - name: check poetry
         run: poetry --version
-      - id: local-action-hit
-        uses: ./
-        with:
-          cache-key-suffix: ${{ github.run_number }}
-          python-version: ${{ matrix.python-version }}
-      - name: check outputs.cache-hit (hit)
-        env:
-          CACHE_HIT_VALUE: ${{ steps.local-action-hit.outputs.cache-hit }}
-        if: steps.local-action-hit.outputs.cache-hit != 'true'
-        run: |
-          echo "outputs.cache-hit=${CACHE_HIT_VALUE}"
-          exit 1
   test-local-action-hit:
     # This has to be run after the miss as the cache is not uploaded until the
     # the job is finished.
