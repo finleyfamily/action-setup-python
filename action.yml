@@ -3,11 +3,14 @@ description: Setup a specific version of Python & poetry with virtual environmen
 author: Kyle Finley
 branding:
   color: purple
-  icon: coffee
+  icon: cloud-lightning
 
 inputs:
   architecture:
     description: The target architecture (x86, x64) of the Python interpreter.
+  cache-key-suffix:
+    description: Temporary input to allow for slight customization of the cache key until full customization can be provided.
+    required: false
   poetry-preview:
     description: Allow install of prerelease versions of Poetry.
     required: false
@@ -48,4 +51,4 @@ runs:
       uses: actions/cache@v2
       with:
         path: .venv
-        key: venv-${{ runner.os }}-${{ steps.composite-setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}
+        key: venv-${{ runner.os }}-${{ steps.composite-setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}${{ inputs.cache-key-suffix }}
