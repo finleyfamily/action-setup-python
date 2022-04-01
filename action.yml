@@ -37,7 +37,7 @@ runs:
   using: composite
   steps:
     - id: composite-setup-python
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v3.1.0
       with:
         architecture: ${{ inputs.architecture }}
         python-version: ${{ inputs.python-version }}
