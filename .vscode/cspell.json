@@ -1,5 +1,5 @@
 {
-    "version": "0.1",
+    "version": "0.2",
     "ignorePaths": [
         "**/.venv/**",
         "**/node_modules/**",
@@ -10,11 +10,17 @@
     "language": "en",
     "languageSettings": [
         {
-            "languageId": "toml",
             "allowCompoundWords": true,
             "dictionaries": [
                 "python"
-            ]
+            ],
+            "languageId": "toml"
+        },
+        {
+            "dictionaries": [
+                "bash"
+            ],
+            "languageId": "*"
         }
     ],
     "maxNumberOfProblems": 100,
@@ -24,6 +30,7 @@
         "editorconfig",
         "fgrep",
         "frontmatter",
+        "ifeq",
         "maxlevel",
         "mdformat",
         "minlevel",
