@@ -10,12 +10,30 @@ inputs:
   architecture:
     description: The target architecture (x86, x64) of the Python interpreter.
   cache-key-suffix:
-    description: Temporary input to allow for slight customization of the cache key until full customization can be provided.
+    description: |
+      Temporary input to allow for slight customization of the cache key until full customization can be provided.
     required: false
   ensure-cache-is-healthy:
-    description: Ensure the cached Python virtual environment is healthy. In most cases, this should be left set to `true` (default). _(non-Windows only)_
+    description: |
+      Ensure the cached Python virtual environment is healthy.
+      In most cases, this should be left set to `true` (default). _(non-Windows only)_
     required: false
     default: true
+  poetry-install:
+    description: Whether to run `poetry install`.
+    required: false
+    default: true
+  poetry-install-args:
+    description: Additional args to pass to `poetry install`.
+    required: false
+    default: '-vvv --remove-untracked'
+  poetry-install-cmd:
+    description: |
+      Command for installing poetry project.
+      Can be used to provide a custom install command.
+      The value of `poetry-install-args` is appended after this.
+    required: false
+    default: poetry install
   poetry-preview:
     description: Allow install of prerelease versions of Poetry.
     required: false
@@ -66,4 +84,17 @@ runs:
         runner.os != 'Windows' &&
         steps.composite-python-venv-cache.outputs.cache-hit == 'true'
       run: poetry run pip --version >/dev/null 2>&1 || rm -rf .venv
+      shell: bash
+    - name: Install Dependencies
+      if: inputs.poetry-install == 'true'
+      env:
+          POETRY_INSTALL_ARGS: ${{ inputs.poetry-install-args }}
+          POETRY_INSTALL_CMD: ${{ inputs.poetry-install-cmd }}
+      run: |
+        if [[ -f "Makefile" ]] && grep -q 'setup-poetry:' Makefile; then
+          echo "installing project using Makefile...";
+          make setup-poetry;
+        else
+          ${POETRY_INSTALL_CMD} ${POETRY_INSTALL_ARGS};
+        fi
       shell: bash

@@ -1,4 +1,9 @@
+CI := $(if $(CI),yes,no)
 SHELL := /bin/bash
+
+ifeq ($(CI), yes)
+	POETRY_OPTS = "-vvv"
+endif
 
 help: ## show this message
 	@IFS=$$'\n' ; \
@@ -30,7 +35,7 @@ setup-npm: ## install node dependencies
 	@npm ci
 
 setup-poetry: ## setup python virtual environment
-	@poetry install \
+	@poetry install $(POETRY_OPTS) \
 		--remove-untracked
 
 setup-pre-commit: ## install pre-commit git hooks

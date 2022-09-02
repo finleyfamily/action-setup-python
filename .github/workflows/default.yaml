@@ -59,8 +59,8 @@ jobs:
           exit 1
       - name: check poetry
         run: poetry --version
-      - name: install dependencies to populate the cache
-        run: poetry install
+      - name: ensure pre-commit is installed
+        run: poetry run pre-commit sample-config
   test-local-action-hit:
     # This has to be run after the miss as the cache is not uploaded until the
     # the job is finished.
@@ -76,6 +76,7 @@ jobs:
         uses: ./
         with:
           cache-key-suffix: ${{ github.run_number }}
+          poetry-install: false
           python-version: ${{ matrix.python-version }}
       - name: check outputs.cache-hit (hit)
         env:
@@ -84,3 +85,5 @@ jobs:
         run: |
           echo "outputs.cache-hit=${CACHE_HIT_VALUE}"
           exit 1
+      - name: ensure pre-commit is installed
+        run: poetry run pre-commit sample-config
