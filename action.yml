@@ -5,12 +5,17 @@ branding:
   color: purple
   icon: cloud-lightning
 
+
 inputs:
   architecture:
     description: The target architecture (x86, x64) of the Python interpreter.
   cache-key-suffix:
     description: Temporary input to allow for slight customization of the cache key until full customization can be provided.
     required: false
+  ensure-cache-is-healthy:
+    description: Ensure the cached Python virtual environment is healthy. In most cases, this should be left set to `true` (default). _(non-Windows only)_
+    required: false
+    default: true
   poetry-preview:
     description: Allow install of prerelease versions of Poetry.
     required: false
@@ -25,6 +30,7 @@ inputs:
     description: Used to pull python distributions from actions/python-versions. Since there's a default, this is typically not supplied by the user.
     default: ${{ github.token }}
 
+
 outputs:
   cache-hit:
     description: Whether there was a cache hit for the Python virtual environment.
@@ -32,6 +38,7 @@ outputs:
   python-version:
     description: The installed Python version. Useful when given a version range as input.
     value: ${{ steps.composite-setup-python.outputs.python-version }}
+
 
 runs:
   using: composite
@@ -52,3 +59,11 @@ runs:
       with:
         path: .venv
         key: venv-${{ runner.os }}-${{ steps.composite-setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}${{ inputs.cache-key-suffix }}
+    - name: Ensure Cache Is Healthy
+      if: |
+        always() &&
+        inputs.ensure-cache-is-healthy == 'true' &&
+        runner.os != 'Windows' &&
+        steps.composite-python-venv-cache.outputs.cache-hit == 'true'
+      run: poetry run pip --version >/dev/null 2>&1 || rm -rf .venv
+      shell: bash
