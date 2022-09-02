@@ -6,7 +6,7 @@ authors = ["Kyle Finley <kyle@finley.sh>"]
 license = "Apache-2.0"
 
 [tool.poetry.dependencies]
-python = "^3.9"
+python = "^3.7"
 
 [tool.poetry.dev-dependencies]
 pre-commit = "^2.20.0"
