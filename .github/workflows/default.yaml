@@ -17,7 +17,7 @@ jobs:
         id: setup-python
         with:
           python-version: ${{ matrix.python-version }}
-      - uses: Gr1N/setup-poetry@v7
+      - uses: Gr1N/setup-poetry@v8
       - uses: actions/cache@v3.2.4
         id: cache
         with:
