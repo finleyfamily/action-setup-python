@@ -68,7 +68,7 @@ runs:
         python-version: ${{ inputs.python-version }}
         token: ${{ inputs.token }}
     - id: composite-setup-poetry
-      uses: Gr1N/setup-poetry@v7
+      uses: Gr1N/setup-poetry@v8
       with:
         poetry-preview: ${{ inputs.poetry-preview }}
         poetry-version: ${{ inputs.poetry-version }}
