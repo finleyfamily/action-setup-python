@@ -26,7 +26,7 @@ inputs:
   poetry-install-args:
     description: Additional args to pass to `poetry install`.
     required: false
-    default: '-vvv --remove-untracked'
+    default: '-v --sync'
   poetry-install-cmd:
     description: |
       Command for installing poetry project.
