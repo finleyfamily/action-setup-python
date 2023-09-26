@@ -101,6 +101,7 @@ runs:
       env:
         POETRY_CHECK_CMD: ${{ inputs.poetry-check-cmd }}
       run: poetry ${POETRY_CHECK_CMD}
+      shell: bash
     - name: Install Dependencies
       if: inputs.poetry-install == 'true'
       env:
