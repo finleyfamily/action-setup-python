@@ -1,6 +1,6 @@
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.3.0
+    rev: v4.4.0
     hooks:
       - id: check-json
       - id: check-merge-conflict
@@ -31,7 +31,7 @@ repos:
         name: Pretty Format Json (indent=2)
       - id: trailing-whitespace
   - repo: https://github.com/ITProKyle/pre-commit-hook-yamlfmt
-    rev: v0.2.0
+    rev: v0.2.1
     hooks:
       - id: yamlfmt
         args: [--mapping, '2', --offset, '2', --sequence, '4']
@@ -42,7 +42,7 @@ repos:
             \.pre-commit-config.yaml|
           )$
   - repo: https://github.com/executablebooks/mdformat
-    rev: 0.7.16
+    rev: 0.7.17
     hooks:
       - id: mdformat
         additional_dependencies:
@@ -52,6 +52,6 @@ repos:
   # markdownlint is still used after formatting to enforce some rules that the
   # formatter will break depending on various factors
   - repo: https://github.com/igorshubovych/markdownlint-cli
-    rev: v0.32.2
+    rev: v0.37.0
     hooks:
       - id: markdownlint
