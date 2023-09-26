@@ -19,6 +19,17 @@ inputs:
       In most cases, this should be left set to `true` (default). _(non-Windows only)_
     required: false
     default: true
+  poetry-check:
+    description: Whether validate the content of the `pyproject.toml` file and its consistency with the `poetry.lock` file.
+    required: false
+    default: true
+  poetry-check-cmd:
+    description: |
+      The poetry command to run when checking the lock file (e.g. `check`).
+      This command was changed in poetry 1.6 (default used by this action).
+      To support older versions of poetry, provide a value for this input.
+    required: false
+    default: check
   poetry-install:
     description: Whether to run `poetry install`.
     required: false
@@ -85,6 +96,11 @@ runs:
         steps.composite-python-venv-cache.outputs.cache-hit == 'true'
       run: poetry run pip --version >/dev/null 2>&1 || rm -rf .venv
       shell: bash
+    - name: Check pyproject.toml & poetry.lock
+      if: inputs.poetry-check == 'true'
+      env:
+        POETRY_CHECK_CMD: ${{ inputs.poetry-check-cmd }}
+      run: poetry ${POETRY_CHECK_CMD}
     - name: Install Dependencies
       if: inputs.poetry-install == 'true'
       env:
