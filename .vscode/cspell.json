@@ -35,6 +35,7 @@
         "mdformat",
         "minlevel",
         "printf",
+        "pyproject",
         "redhat",
         "venv",
         "virtualenvs",
