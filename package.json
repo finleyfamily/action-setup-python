@@ -2,6 +2,6 @@
   "name": "action-setup-python",
   "version": "0.0.0",
   "devDependencies": {
-    "cspell": "^8.1.0"
+    "cspell": "^8.1.1"
   }
 }
