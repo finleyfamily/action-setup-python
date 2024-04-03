@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: [3.11]
+        python-version: [3.12]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -33,7 +33,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: [3.9, '3.10', 3.11]
+        python-version: [3.9, '3.10', 3.11, 3.12]
     steps:
       - uses: actions/checkout@v4
       - id: local-action
@@ -69,7 +69,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: [3.9, '3.10', 3.11]
+        python-version: [3.9, '3.10', 3.11, 3.12]
     steps:
       - uses: actions/checkout@v4
       - id: local-action
@@ -87,3 +87,15 @@ jobs:
           exit 1
       - name: ensure pre-commit is installed
         run: poetry run pre-commit sample-config
+  test-local-action-python-version-file:
+    name: Test Local Action Using Version From File
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - id: local-action
+        uses: ./
+        with:
+          cache-key-suffix: ${{ github.run_number }}-from-file
+          poetry-install: false
+      - name: ensure python version
+        run: python -c "import sys; assert sys.version_info >= (3, 12);"

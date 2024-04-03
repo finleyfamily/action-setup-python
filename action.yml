@@ -53,8 +53,13 @@ inputs:
     description: Poetry version to use. If version is not provided then latest stable version will be used.
     required: false
   python-version:
-    description: Version range or exact version of a Python version to use, using semver version range syntax.
-    default: 3.x
+    description: Version range or exact version of a Python version to use, using semver version range syntax. Reads from pyproject.toml if unset.
+    default: ${{ null }}
+    required: false
+  python-version-file:
+    description: File containing the Python version to use.
+    default: pyproject.toml
+    required: false
   token:
     description: Used to pull python distributions from actions/python-versions. Since there's a default, this is typically not supplied by the user.
     default: ${{ github.token }}
@@ -72,12 +77,28 @@ outputs:
 runs:
   using: composite
   steps:
-    - id: composite-setup-python
+    - id: composite-setup-python-explicit
+      if: inputs.python-version != ''
       uses: actions/setup-python@v5
       with:
         architecture: ${{ inputs.architecture }}
         python-version: ${{ inputs.python-version }}
         token: ${{ inputs.token }}
+    - id: composite-setup-python-file
+      if: inputs.python-version == ''
+      uses: actions/setup-python@v5
+      with:
+        architecture: ${{ inputs.architecture }}
+        python-version-file: ${{ inputs.python-version-file }}
+        token: ${{ inputs.token }}
+    - id: composite-setup-python
+      shell: bash
+      run: |
+        if [[ -n "${{ steps.composite-setup-python-explicit.outputs.python-version }}" ]]; then
+          echo "python-version=${{ steps.composite-setup-python-explicit.outputs.python-version }}" >> $GITHUB_OUTPUT ;
+        else
+          echo "python-version=${{ steps.composite-setup-python-file.outputs.python-version }}" >> $GITHUB_OUTPUT ;
+        fi
     - id: composite-setup-poetry
       uses: Gr1N/setup-poetry@v9
       with:
