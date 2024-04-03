@@ -92,7 +92,6 @@ runs:
         python-version-file: ${{ inputs.python-version-file }}
         token: ${{ inputs.token }}
     - id: composite-setup-python
-      shell: bash
       run: |
         if [[ -n "${{ steps.composite-setup-python-explicit.outputs.python-version }}" ]]; then
           echo "python-version=${{ steps.composite-setup-python-explicit.outputs.python-version }}" >> $GITHUB_OUTPUT;
@@ -103,6 +102,7 @@ runs:
         mkdir -p $POETRY_HOME;
         echo "POETRY_HOME=$POETRY_HOME" >> $GITHUB_ENV;
         echo "poetry-home=$POETRY_HOME" >> $GITHUB_OUTPUT;
+      shell: bash
     - id: composite-setup-poetry
       uses: Gr1N/setup-poetry@v9
       with:
@@ -111,6 +111,7 @@ runs:
     - id: composite-poetry-plugins
       run: |
         $POETRY_HOME/bin/pip install --user poetry-plugin-export;
+      shell: bash
     - id: composite-python-venv-cache
       uses: actions/cache@v4.0.2
       with:
