@@ -95,15 +95,22 @@ runs:
       shell: bash
       run: |
         if [[ -n "${{ steps.composite-setup-python-explicit.outputs.python-version }}" ]]; then
-          echo "python-version=${{ steps.composite-setup-python-explicit.outputs.python-version }}" >> $GITHUB_OUTPUT ;
+          echo "python-version=${{ steps.composite-setup-python-explicit.outputs.python-version }}" >> $GITHUB_OUTPUT;
         else
-          echo "python-version=${{ steps.composite-setup-python-file.outputs.python-version }}" >> $GITHUB_OUTPUT ;
+          echo "python-version=${{ steps.composite-setup-python-file.outputs.python-version }}" >> $GITHUB_OUTPUT;
         fi
+        export POETRY_HOME="${HOME}/.local/share/pypoetry";
+        mkdir -p $POETRY_HOME;
+        echo "POETRY_HOME=$POETRY_HOME" >> $GITHUB_ENV;
+        echo "poetry-home=$POETRY_HOME" >> $GITHUB_OUTPUT;
     - id: composite-setup-poetry
       uses: Gr1N/setup-poetry@v9
       with:
         poetry-preview: ${{ inputs.poetry-preview }}
         poetry-version: ${{ inputs.poetry-version }}
+    - id: composite-poetry-plugins
+      run: |
+        $POETRY_HOME/bin/pip install --user poetry-plugin-export;
     - id: composite-python-venv-cache
       uses: actions/cache@v4.0.2
       with:
