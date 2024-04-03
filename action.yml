@@ -95,9 +95,9 @@ runs:
       shell: bash
       run: |
         if [[ -n "${{ steps.composite-setup-python-explicit.outputs.python-version }}" ]]; then
-          echo "python-version=${{ steps.composite-setup-python-explicit.outputs.python-version }}" >> $GITHUB_ENV ;
+          echo "python-version=${{ steps.composite-setup-python-explicit.outputs.python-version }}" >> $GITHUB_OUTPUT ;
         else
-          echo "python-version=${{ steps.composite-setup-python-file.outputs.python-version }}" >> $GITHUB_ENV ;
+          echo "python-version=${{ steps.composite-setup-python-file.outputs.python-version }}" >> $GITHUB_OUTPUT ;
         fi
     - id: composite-setup-poetry
       uses: Gr1N/setup-poetry@v9
