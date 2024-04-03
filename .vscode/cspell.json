@@ -1,44 +1,13 @@
 {
-    "version": "0.2",
     "ignorePaths": [
-        "**/.venv/**",
-        "**/node_modules/**",
-        "**/package-lock.json",
-        "**/package.json",
-        "**/poetry.lock"
+        ".github/labels.yml"
     ],
-    "language": "en",
-    "languageSettings": [
-        {
-            "allowCompoundWords": true,
-            "dictionaries": [
-                "python"
-            ],
-            "languageId": "toml"
-        },
-        {
-            "dictionaries": [
-                "bash"
-            ],
-            "languageId": "*"
-        }
+    "import": [
+        "@itprokyle/cspell-dict/cspell-ext.json"
     ],
     "maxNumberOfProblems": 100,
+    "version": "0.2",
     "words": [
-        "autofix",
-        "dependabot",
-        "editorconfig",
-        "fgrep",
-        "frontmatter",
-        "ifeq",
-        "maxlevel",
-        "mdformat",
-        "minlevel",
-        "printf",
-        "pyproject",
-        "redhat",
-        "venv",
-        "virtualenvs",
-        "yamlfmt"
+        "markdownlint"
     ]
 }

@@ -2,24 +2,14 @@ CI := $(if $(CI),yes,no)
 SHELL := /bin/bash
 
 ifeq ($(CI), yes)
-	POETRY_OPTS = "-vvv"
+	POETRY_OPTS = "-v"
+	PRE_COMMIT_OPTS = --show-diff-on-failure --verbose
 endif
 
 help: ## show this message
-	@IFS=$$'\n' ; \
-	help_lines=(`fgrep -h "##" $(MAKEFILE_LIST) | fgrep -v fgrep | sed -e 's/\\$$//' | sed -e 's/##/:/'`); \
-	printf "%-30s %s\n" "target" "help" ; \
-	printf "%-30s %s\n" "------" "----" ; \
-	for help_line in $${help_lines[@]}; do \
-		IFS=$$':' ; \
-		help_split=($$help_line) ; \
-		help_command=`echo $${help_split[0]} | sed -e 's/^ *//' -e 's/ *$$//'` ; \
-		help_info=`echo $${help_split[2]} | sed -e 's/^ *//' -e 's/ *$$//'` ; \
-		printf '\033[36m'; \
-		printf "%-30s %s" $$help_command ; \
-		printf '\033[0m'; \
-		printf "%s\n" $$help_info; \
-	done
+	@awk \
+		'BEGIN {FS = ":.*##"; printf "\nUsage: make \033[36m<target>\033[0m\n"} /^[a-zA-Z_-]+:.*?##/ { printf "  \033[36m%-30s\033[0m %s\n", $$1, $$2 } /^##@/ { printf "\n\033[1m%s\033[0m\n", substr($$0, 5) }' \
+		$(MAKEFILE_LIST)
 
 format: format-md ## format files
 
@@ -27,7 +17,9 @@ format-md: ## format markdown files
 	@poetry run pre-commit run mdformat --all-files
 
 run-pre-commit: ## run pre-commit for all files
-	@poetry run pre-commit run --all-files
+	@poetry run pre-commit run $(PRE_COMMIT_OPTS) \
+		--all-files \
+		--color always
 
 setup: setup-poetry setup-pre-commit setup-npm ## setup local dev environment
 
@@ -36,16 +28,18 @@ setup-npm: ## install node dependencies
 
 setup-poetry: ## setup python virtual environment
 	@poetry install $(POETRY_OPTS) \
-		--remove-untracked
+		--sync
 
 setup-pre-commit: ## install pre-commit git hooks
 	@poetry run pre-commit install
 
 spellcheck: ## run cspell
 	@echo "Running cSpell to checking spelling..."
-	@npx cspell "**/*" \
+	@npm exec --no -- cspell lint . \
 		--color \
 		--config .vscode/cspell.json \
+		--dot \
+		--gitignore \
 		--must-find-files \
 		--no-progress \
 		--relative \

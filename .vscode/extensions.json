@@ -3,7 +3,6 @@
         "editorconfig.editorconfig",
         "ms-python.python",
         "ms-python.vscode-pylance",
-        "njpwerner.autodocstring",
         "redhat.vscode-yaml",
         "streetsidesoftware.code-spell-checker"
     ]
