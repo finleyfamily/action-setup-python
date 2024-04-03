@@ -11,6 +11,19 @@ on:
 jobs:
   assign-author:
     name: Assign Author to PR
+    if: github.actor != 'dependabot[bot]'
     runs-on: ubuntu-latest
     steps:
       - uses: technote-space/assign-author@v1  # cspell:ignore technote
+  label-pr:
+    name: Label PR
+    permissions:
+      contents: write
+      pull-requests: write
+    runs-on: ubuntu-latest
+    steps:
+      - uses: release-drafter/release-drafter@v6.0.0
+        with:
+          disable-releaser: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

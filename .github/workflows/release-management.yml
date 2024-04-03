@@ -10,6 +10,8 @@ on:
 jobs:
   update-release-draft:
     name: Draft Release
+    permissions:
+      contents: write
     runs-on: ubuntu-latest
     steps:
       - uses: release-drafter/release-drafter@v6.0.0

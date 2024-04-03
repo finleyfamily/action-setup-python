@@ -53,8 +53,12 @@ inputs:
     description: Poetry version to use. If version is not provided then latest stable version will be used.
     required: false
   python-version:
-    description: Version range or exact version of a Python version to use, using semver version range syntax.
-    default: 3.x
+    description: Version range or exact version of a Python version to use, using semver version range syntax. Reads from pyproject.toml if unset.
+    required: false
+  python-version-file:
+    description: File containing the Python version to use.
+    default: pyproject.toml
+    required: false
   token:
     description: Used to pull python distributions from actions/python-versions. Since there's a default, this is typically not supplied by the user.
     default: ${{ github.token }}
@@ -77,6 +81,7 @@ runs:
       with:
         architecture: ${{ inputs.architecture }}
         python-version: ${{ inputs.python-version }}
+        python-version-file: ${{ inputs.python-version-file }}
         token: ${{ inputs.token }}
     - id: composite-setup-poetry
       uses: Gr1N/setup-poetry@v9
