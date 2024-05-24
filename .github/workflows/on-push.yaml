@@ -1,33 +1,30 @@
-name: Default
+name: on push
 
+on:
+  pull_request:  # any pull request
+  push:
+    branches:
+      - master
 
-on: push
+defaults:
+  run:
+    shell: bash
 
+env:
+  NODE_VERSION: '20'
 
 jobs:
-  pre-commit:
-    name: pre-commit
+  spellcheck:
+    # There is an official action published by cSpell.
+    # v1.1.1 was tested but did not function as desired so we are using the CLI.
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        python-version: [3.12]
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        id: setup-python
+      - uses: actions/setup-node@v4
         with:
-          python-version: ${{ matrix.python-version }}
-      - uses: Gr1N/setup-poetry@v9
-      - uses: actions/cache@v4.0.2
-        id: cache
-        with:
-          path: .venv
-          key: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}
-      - name: Ensure Cache Is Healthy
-        if: runner.os != 'Windows' && steps.cache.outputs.cache-hit == 'true'
-        run: poetry run pip --version > /dev/null 2>&1 || rm -rf .venv
-      - run: poetry install -vv --remove-untracked
-      - uses: pre-commit/action@v3.0.1
+          node-version: ${{ env.NODE_VERSION }}
+      - run: npm ci
+      - run: make spellcheck
   test-local-action-miss:
     name: Test Local Action With Cache Miss
     runs-on: ubuntu-latest

@@ -2,12 +2,22 @@
 autolabeler:  # cspell:ignore autolabeler
   - label: bug
     branch: [/^(bug|bugfix|fix|hotfix)\/.*/]
+  - label: changelog:skip
+    branch: [/^(dependabot)\/.*/]
   - label: dependencies
-    branch: [/^(depend|dependencies|dependabot)\/.*/]
+    branch: [/^(depend|dependabot|renovate)\/.*/]
   - label: documentation
     branch: [/^(docs)\/.*/]
   - label: feature
-    branch: [/^(feat|feature)\/.*/]
+    branch: [/^(enhancement|feat|feature)\/.*/]
+  - label: github_actions
+    files:
+      - .github/workflows/*.yml
+  - label: javascript
+    files:
+      - '**/*.js'
+      - '**/package-lock.json'
+      - '**/package.json'
   - label: maintenance
     branch: [/^(chore|maint|maintain|maintenance)\/.*/]
   - label: changelog:patch
@@ -16,17 +26,14 @@ autolabeler:  # cspell:ignore autolabeler
     files:
       - poetry.lock
       - poetry.toml
+      - pyproject.toml
   - label: python
     files:
       - '**/*.py'
       - poetry.lock
       - pyproject.toml
-      - setup.cfg
   - label: release
     branch: [/^(release)\/.*/]
-  - label: github_actions
-    files:
-      - .github/workflows/*.yml
 categories:
   - title: 🚀 Features
     labels:
