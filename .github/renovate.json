@@ -2,7 +2,7 @@
     "$schema": "https://docs.renovatebot.com/renovate-schema.json",
     "extends": [
         "github>finleyfamily/renovate",
-        "github>finleyfamily//presets/github-action"
+        "github>finleyfamily/renovate//presets/github-action"
     ],
     "reviewers": [
         "ITProKyle"
