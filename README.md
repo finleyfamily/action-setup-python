@@ -75,6 +75,7 @@ steps:
 | Key            | Description                                                               |
 | -------------- | ------------------------------------------------------------------------- |
 | cache-hit      | Whether there was a cache hit for the Python virtual environment.         |
+| python-path    | The absolute path to the Python or PyPy executable.                       |
 | python-version | The installed Python version. Useful when given a version range as input. |
 
 [pipx]: https://github.com/pypa/pipx
