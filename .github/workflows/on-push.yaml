@@ -45,7 +45,6 @@ jobs:
       - id: local-action
         uses: ./
         with:
-          cache-key-suffix: ${{ github.run_number }}
           python-version: ${{ matrix.python-version }}
       - name: check outputs.python-version
         env:
@@ -81,7 +80,6 @@ jobs:
       - id: local-action
         uses: ./
         with:
-          cache-key-suffix: ${{ github.run_number }}
           poetry-install: false
           python-version: ${{ matrix.python-version }}
       - name: check outputs.cache-hit (hit)
@@ -101,7 +99,6 @@ jobs:
       - id: local-action
         uses: ./
         with:
-          cache-key-suffix: ${{ github.run_number }}-from-file
           poetry-install: false
       - name: ensure python version
         run: python -c "import sys; assert sys.version_info >= (3, 12);"
