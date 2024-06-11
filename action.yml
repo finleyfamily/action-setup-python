@@ -9,12 +9,6 @@ branding:
 inputs:
   architecture:
     description: The target architecture (x86, x64) of the Python interpreter.
-  ensure-cache-is-healthy:
-    description: |
-      Ensure the cached Python virtual environment is healthy.
-      In most cases, this should be left set to `true` (default). _(non-Windows only)_
-    required: false
-    default: true
   poetry-check:
     description: Whether validate the content of the `pyproject.toml` file and its consistency with the `poetry.lock` file.
     required: false
