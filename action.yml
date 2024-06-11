@@ -28,29 +28,32 @@ inputs:
       The poetry command to run when checking the lock file (e.g. `check`).
       This command was changed in poetry 1.6 (default used by this action).
       To support older versions of poetry, provide a value for this input.
-    required: false
     default: check
+    required: false
   poetry-install:
     description: Whether to run `poetry install`.
     required: false
     default: true
   poetry-install-args:
     description: Additional args to pass to `poetry install`.
-    required: false
     default: '-v --sync'
+    required: false
   poetry-install-cmd:
     description: |
       Command for installing poetry project.
       Can be used to provide a custom install command.
       The value of `poetry-install-args` is appended after this.
-    required: false
     default: poetry install
+    required: false
   poetry-preview:
     description: Allow install of prerelease versions of Poetry.
-    required: false
     default: false
+    required: false
   poetry-version:
-    description: Poetry version to use. If version is not provided then latest stable version will be used.
+    description: |
+      Poetry version to use. If version is not provided then latest stable version will be used.
+      Should be provided as a version specifier that can be passed to [pipx](https://github.com/pypa/pipx) or `latest`.
+    default: "latest"
     required: false
   python-version:
     description: Version range or exact version of a Python version to use, using semver version range syntax. Reads from pyproject.toml if unset.
@@ -77,39 +80,64 @@ outputs:
 runs:
   using: composite
   steps:
-    - id: composite-setup-python-explicit
+    - name: Output pipx variables
+      id: pipx-vars
+      run: |
+        echo "pipx-home=$PIPX_HOME" >> $GITHUB_OUTPUT;
+        echo "pipx-bin-dir=$PIPX_BIN_DIR" >> $GITHUB_OUTPUT;
+      shell: bash
+    - name: Cache pipx
+      id: composit-cache-pipx
+      uses: actions/cache@v3
+      with:
+        path: |
+          ${{ steps.pipx-vars.outputs.pipx-home }}
+          ${{ steps.pipx-vars.outputs.pipx-bin-dir }}
+        key: pipx-poetry-${{ inputs.poetry-version }}
+    - name: Install poetry
+      env:
+        INPUT_POETRY_PREVIEW: "${{ inputs.poetry-preview }}"
+        INPUT_POETRY_VERSION: "${{ inputs.poetry-version }}"
+      id: composit-install-poetry
+      if: ${{ steps.composit-cache-pipx.outputs.cache-hit != 'true' }}
+      run: "${GITHUB_ACTION_PATH}/scripts/install-poetry.sh"
+      shell: bash
+    - name: Ensure pipx paths
+      run: |
+        pipx ensurepath;
+        pipx list --include-injected;
+      shell: bash
+    - name: Setup python (explicit)
+      id: composite-setup-python-explicit
       if: inputs.python-version != ''
       uses: actions/setup-python@v5
       with:
         architecture: ${{ inputs.architecture }}
         python-version: ${{ inputs.python-version }}
         token: ${{ inputs.token }}
-    - id: composite-setup-python-file
+    - name: Setup python (implicit / file)
+      id: composite-setup-python-file
       if: inputs.python-version == ''
       uses: actions/setup-python@v5
       with:
         architecture: ${{ inputs.architecture }}
         python-version-file: ${{ inputs.python-version-file }}
         token: ${{ inputs.token }}
-    - id: composite-setup-python
-      shell: bash
+    - name: Extract python-version output
+      id: composite-setup-python
       run: |
         if [[ -n "${{ steps.composite-setup-python-explicit.outputs.python-version }}" ]]; then
-          echo "python-version=${{ steps.composite-setup-python-explicit.outputs.python-version }}" >> $GITHUB_OUTPUT ;
+          echo "python-version=${{ steps.composite-setup-python-explicit.outputs.python-version }}" >> $GITHUB_OUTPUT;
         else
-          echo "python-version=${{ steps.composite-setup-python-file.outputs.python-version }}" >> $GITHUB_OUTPUT ;
+          echo "python-version=${{ steps.composite-setup-python-file.outputs.python-version }}" >> $GITHUB_OUTPUT;
         fi
-    - id: composite-setup-poetry
-      uses: Gr1N/setup-poetry@v9
-      with:
-        poetry-preview: ${{ inputs.poetry-preview }}
-        poetry-version: ${{ inputs.poetry-version }}
+      shell: bash
     - id: composite-python-venv-cache
       uses: actions/cache@v4.0.2
       with:
         path: .venv
         key: venv-${{ runner.os }}-${{ steps.composite-setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}${{ inputs.cache-key-suffix }}
-    - name: Ensure Cache Is Healthy
+    - name: Ensure cache is healthy
       if: |
         always() &&
         inputs.ensure-cache-is-healthy == 'true' &&
@@ -123,11 +151,11 @@ runs:
         POETRY_CHECK_CMD: ${{ inputs.poetry-check-cmd }}
       run: poetry ${POETRY_CHECK_CMD}
       shell: bash
-    - name: Install Dependencies
+    - name: Install dependencies
       if: inputs.poetry-install == 'true'
       env:
-          POETRY_INSTALL_ARGS: ${{ inputs.poetry-install-args }}
-          POETRY_INSTALL_CMD: ${{ inputs.poetry-install-cmd }}
+        POETRY_INSTALL_ARGS: ${{ inputs.poetry-install-args }}
+        POETRY_INSTALL_CMD: ${{ inputs.poetry-install-cmd }}
       run: |
         if [[ -f "Makefile" ]] && grep -q 'setup-poetry:' Makefile; then
           echo "installing project using Makefile...";
