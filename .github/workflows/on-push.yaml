@@ -14,6 +14,15 @@ env:
   NODE_VERSION: '20'
 
 jobs:
+  shellcheck:
+    name: Shellcheck
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run ShellCheck
+        uses: ludeeus/action-shellcheck@2.0.0
+        with:
+          scandir: ./scripts
   spellcheck:
     # There is an official action published by cSpell.
     # v1.1.1 was tested but did not function as desired so we are using the CLI.
