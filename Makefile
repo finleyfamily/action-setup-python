@@ -25,6 +25,7 @@ lint: ## run all linters
 		$(MAKE) --no-print-directory lint-shellcheck; \
 	fi
 
+# cspell:ignore EPEL
 lint-shellcheck: ## lint shell scripts using shellcheck
 	@echo "Running shellcheck..."
 	@if [ -z "$(command -v shellcheck)" ]; then \
