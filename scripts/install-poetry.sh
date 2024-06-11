@@ -9,6 +9,8 @@ if [[ "${INPUT_POETRY_PREVIEW}" == "true" ]]; then
   PIP_ARGS="--pre";
 fi;
 
+pipx ensurepath;
+
 case "${INPUT_POETRY_VERSION}" in
   latest)
     pipx install poetry --pip-args="${PIP_ARGS}";
@@ -33,3 +35,7 @@ poetry config virtualenvs.prefer-active-python true
 
 pipx inject poetry poetry-plugin-export;
 poetry config warnings.export false;
+
+for plugin in ${INPUT_POETRY_PLUGINS}; do
+  pipx inject poetry "${plugin}";
+done

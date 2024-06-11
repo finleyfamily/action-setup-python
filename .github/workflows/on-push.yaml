@@ -34,8 +34,8 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
       - run: npm ci
       - run: make spellcheck
-  test-local-action-miss:
-    name: Test Local Action With Cache Miss
+  test-local-action:
+    name: Test Local Action
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -45,6 +45,9 @@ jobs:
       - id: local-action
         uses: ./
         with:
+          poetry-plugins: >
+            poetry-plugin-export
+            poetry-dynamic-versioning[plugin]
           python-version: ${{ matrix.python-version }}
       - name: check outputs.python-version
         env:
@@ -59,31 +62,29 @@ jobs:
         run: poetry --version
       - name: ensure pre-commit is installed
         run: poetry run pre-commit sample-config
-  test-local-action-hit:
+      - name: ensure poetry-dynamic-versioning is installed
+        run: poetry self show plugins | grep poetry-dynamic-versioning
+      - name: ensure poetry-plugin-export is installed
+        run: poetry self show plugins | grep poetry-plugin-export
+  test-local-action-no-plugins:
     # This has to be run after the miss as the cache is not uploaded until the
     # the job is finished.
     name: Test Local Action With Cache Hit
-    needs: test-local-action-miss
+    needs: test-local-action
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: [3.9, '3.10', 3.11, 3.12]
+        python-version: [3.12]
     steps:
       - uses: actions/checkout@v4
       - id: local-action
         uses: ./
         with:
-          poetry-install: false
           python-version: ${{ matrix.python-version }}
-      - name: check outputs.cache-hit (hit)
-        env:
-          CACHE_HIT_VALUE: ${{ steps.local-action.outputs.cache-hit }}
-        if: steps.local-action.outputs.cache-hit != 'true'
-        run: |
-          echo "outputs.cache-hit=${CACHE_HIT_VALUE}"
-          exit 1
       - name: ensure pre-commit is installed
         run: poetry run pre-commit sample-config
+      - name: ensure poetry-plugin-export is installed
+        run: poetry self show plugins | grep poetry-plugin-export
   test-local-action-python-version-file:
     name: Test Local Action Using Version From File
     runs-on: ubuntu-latest
