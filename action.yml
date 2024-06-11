@@ -79,27 +79,12 @@ outputs:
 runs:
   using: composite
   steps:
-    - name: Output pipx variables
-      id: pipx-vars
-      run: |
-        echo "pipx-home=$PIPX_HOME" >> $GITHUB_OUTPUT;
-        echo "pipx-bin-dir=$PIPX_BIN_DIR" >> $GITHUB_OUTPUT;
-      shell: bash
-    - name: Cache pipx
-      id: composit-cache-pipx
-      uses: actions/cache@v4
-      with:
-        path: |
-          ${{ steps.pipx-vars.outputs.pipx-home }}
-          ${{ steps.pipx-vars.outputs.pipx-bin-dir }}
-        key: pipx-poetry-${{ inputs.poetry-version }}
     - name: Install poetry
       env:
         INPUT_POETRY_PREVIEW: "${{ inputs.poetry-preview }}"
         INPUT_POETRY_VERSION: "${{ inputs.poetry-version }}"
       id: composit-install-poetry
-      if: ${{ steps.composit-cache-pipx.outputs.cache-hit != 'true' }}
-      run: "${GITHUB_ACTION_PATH}/scripts/install-poetry.sh"
+      run: ${GITHUB_ACTION_PATH}/scripts/install-poetry.sh
       shell: bash
     - name: Ensure pipx paths
       run: |
