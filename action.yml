@@ -12,7 +12,7 @@ inputs:
   poetry-check:
     description: Whether validate the content of the `pyproject.toml` file and its consistency with the `poetry.lock` file.
     required: false
-    default: true
+    default: false
   poetry-check-cmd:
     description: |
       The poetry command to run when checking the lock file (e.g. `check`).

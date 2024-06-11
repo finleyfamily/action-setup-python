@@ -68,9 +68,7 @@ jobs:
         run: poetry self show plugins | grep poetry-plugin-export
   test-local-action-no-plugins:
     # This has to be run after the miss as the cache is not uploaded until the
-    # the job is finished.
-    name: Test Local Action With Cache Hit
-    needs: test-local-action
+    name: Test Local Action without plugins
     runs-on: ubuntu-latest
     strategy:
       matrix:
