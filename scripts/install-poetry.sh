@@ -30,3 +30,6 @@ esac
 poetry config virtualenvs.create true
 poetry config virtualenvs.in-project true
 poetry config virtualenvs.prefer-active-python true
+
+pipx inject poetry poetry-plugin-export;
+poetry config warnings.export false;

@@ -93,7 +93,7 @@ runs:
         path: |
           ${{ steps.pipx-vars.outputs.pipx-home }}
           ${{ steps.pipx-vars.outputs.pipx-bin-dir }}
-        key: pipx-poetry-${{ input.poetry-version }}
+        key: pipx-poetry-${{ inputs.poetry-version }}
     - name: Install poetry
       env:
         INPUT_POETRY_PREVIEW: "${{ inputs.poetry-preview }}"
@@ -101,12 +101,6 @@ runs:
       id: composit-install-poetry
       if: ${{ steps.composit-cache-pipx.outputs.cache-hit != 'true' }}
       run: "${GITHUB_ACTION_PATH}/scripts/install-poetry.sh"
-      shell: bash
-    - name: Install poetry-plugin-export
-      if: ${{ steps.composit-cache-pipx.outputs.cache-hit != 'true' }}
-      run: |
-        pipx inject poetry poetry-plugin-export;
-        poetry config warnings.export false;
       shell: bash
     - name: Ensure pipx paths
       run: |
