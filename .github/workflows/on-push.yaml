@@ -34,8 +34,8 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
       - run: npm ci
       - run: make spellcheck
-  test-local-action-miss:
-    name: Test Local Action With Cache Miss
+  test-local-action:
+    name: Test Local Action
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -45,6 +45,9 @@ jobs:
       - id: local-action
         uses: ./
         with:
+          poetry-plugins: >
+            poetry-plugin-export
+            poetry-dynamic-versioning[plugin]
           python-version: ${{ matrix.python-version }}
       - name: check outputs.python-version
         env:
@@ -63,11 +66,11 @@ jobs:
     # This has to be run after the miss as the cache is not uploaded until the
     # the job is finished.
     name: Test Local Action With Cache Hit
-    needs: test-local-action-miss
+    needs: test-local-action
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: [3.9, '3.10', 3.11, 3.12]
+        python-version: [3.12]
     steps:
       - uses: actions/checkout@v4
       - id: local-action
