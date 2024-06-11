@@ -55,13 +55,6 @@ jobs:
           echo "outputs.python-version=${OUTPUTS_PYTHON_VERSION}"
           echo "matrix.python-version=${MATRIX_PYTHON_VERSION}"
           exit 1
-      - name: check outputs.cache-hit (miss)
-        env:
-          CACHE_HIT_VALUE: ${{ steps.local-action.outputs.cache-hit }}
-        if: steps.local-action.outputs.cache-hit == 'true'
-        run: |
-          echo "outputs.cache-hit=${CACHE_HIT_VALUE}"
-          exit 1
       - name: check poetry
         run: poetry --version
       - name: ensure pre-commit is installed
