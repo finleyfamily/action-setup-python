@@ -137,14 +137,6 @@ runs:
       with:
         path: .venv
         key: venv-${{ runner.os }}-${{ steps.composite-setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}${{ inputs.cache-key-suffix }}
-    - name: Ensure cache is healthy
-      if: |
-        always() &&
-        inputs.ensure-cache-is-healthy == 'true' &&
-        runner.os != 'Windows' &&
-        steps.composite-python-venv-cache.outputs.cache-hit == 'true'
-      run: poetry run pip --version >/dev/null 2>&1 || rm -rf .venv
-      shell: bash
     - name: Check pyproject.toml & poetry.lock
       if: inputs.poetry-check == 'true'
       env:
