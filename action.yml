@@ -88,7 +88,7 @@ runs:
       shell: bash
     - name: Cache pipx
       id: composit-cache-pipx
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       with:
         path: |
           ${{ steps.pipx-vars.outputs.pipx-home }}
