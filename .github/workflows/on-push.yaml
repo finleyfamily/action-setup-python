@@ -45,7 +45,6 @@ jobs:
       - id: local-action
         uses: ./
         with:
-          cache-key-suffix: ${{ github.run_number }}
           python-version: ${{ matrix.python-version }}
       - name: check outputs.python-version
         env:
@@ -55,13 +54,6 @@ jobs:
         run: |
           echo "outputs.python-version=${OUTPUTS_PYTHON_VERSION}"
           echo "matrix.python-version=${MATRIX_PYTHON_VERSION}"
-          exit 1
-      - name: check outputs.cache-hit (miss)
-        env:
-          CACHE_HIT_VALUE: ${{ steps.local-action.outputs.cache-hit }}
-        if: steps.local-action.outputs.cache-hit == 'true'
-        run: |
-          echo "outputs.cache-hit=${CACHE_HIT_VALUE}"
           exit 1
       - name: check poetry
         run: poetry --version
@@ -81,7 +73,6 @@ jobs:
       - id: local-action
         uses: ./
         with:
-          cache-key-suffix: ${{ github.run_number }}
           poetry-install: false
           python-version: ${{ matrix.python-version }}
       - name: check outputs.cache-hit (hit)
@@ -101,7 +92,6 @@ jobs:
       - id: local-action
         uses: ./
         with:
-          cache-key-suffix: ${{ github.run_number }}-from-file
           poetry-install: false
       - name: ensure python version
         run: python -c "import sys; assert sys.version_info >= (3, 12);"

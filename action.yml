@@ -9,10 +9,6 @@ branding:
 inputs:
   architecture:
     description: The target architecture (x86, x64) of the Python interpreter.
-  cache-key-suffix:
-    description: |
-      Temporary input to allow for slight customization of the cache key until full customization can be provided.
-    required: false
   ensure-cache-is-healthy:
     description: |
       Ensure the cached Python virtual environment is healthy.
@@ -71,7 +67,10 @@ inputs:
 outputs:
   cache-hit:
     description: Whether there was a cache hit for the Python virtual environment.
-    value: ${{ steps.composite-python-venv-cache.outputs.cache-hit }}
+    value: ${{ steps.composite-setup-python.outputs.cache-hit }}
+  python-path:
+    description: The absolute path to the Python or PyPy executable.
+    value: ${{ steps.composite-setup-python.outputs.cache-hit }}
   python-version:
     description: The installed Python version. Useful when given a version range as input.
     value: ${{ steps.composite-setup-python.outputs.python-version }}
@@ -80,27 +79,12 @@ outputs:
 runs:
   using: composite
   steps:
-    - name: Output pipx variables
-      id: pipx-vars
-      run: |
-        echo "pipx-home=$PIPX_HOME" >> $GITHUB_OUTPUT;
-        echo "pipx-bin-dir=$PIPX_BIN_DIR" >> $GITHUB_OUTPUT;
-      shell: bash
-    - name: Cache pipx
-      id: composit-cache-pipx
-      uses: actions/cache@v4
-      with:
-        path: |
-          ${{ steps.pipx-vars.outputs.pipx-home }}
-          ${{ steps.pipx-vars.outputs.pipx-bin-dir }}
-        key: pipx-poetry-${{ inputs.poetry-version }}
     - name: Install poetry
       env:
         INPUT_POETRY_PREVIEW: "${{ inputs.poetry-preview }}"
         INPUT_POETRY_VERSION: "${{ inputs.poetry-version }}"
       id: composit-install-poetry
-      if: ${{ steps.composit-cache-pipx.outputs.cache-hit != 'true' }}
-      run: "${GITHUB_ACTION_PATH}/scripts/install-poetry.sh"
+      run: ${GITHUB_ACTION_PATH}/scripts/install-poetry.sh
       shell: bash
     - name: Ensure pipx paths
       run: |
@@ -113,6 +97,7 @@ runs:
       uses: actions/setup-python@v5
       with:
         architecture: ${{ inputs.architecture }}
+        cache: poetry
         python-version: ${{ inputs.python-version }}
         token: ${{ inputs.token }}
     - name: Setup python (implicit / file)
@@ -121,22 +106,20 @@ runs:
       uses: actions/setup-python@v5
       with:
         architecture: ${{ inputs.architecture }}
+        cache: poetry
         python-version-file: ${{ inputs.python-version-file }}
         token: ${{ inputs.token }}
-    - name: Extract python-version output
+    - name: Extract python outputs
+      env:
+        OUTPUT_CACHE_HIT: ${{ steps.composite-setup-python-explicit.outputs.cache-hit != '' && steps.composite-setup-python-explicit.outputs.cache-hit || steps.composite-setup-python-file.outputs.cache-hit }}
+        OUTPUT_PYTHON_PATH: ${{ steps.composite-setup-python-explicit.outputs.python-path != '' && steps.composite-setup-python-explicit.outputs.python-path || steps.composite-setup-python-file.outputs.python-path }}
+        OUTPUT_PYTHON_VERSION: ${{ steps.composite-setup-python-explicit.outputs.python-version != '' && steps.composite-setup-python-explicit.outputs.python-version || steps.composite-setup-python-file.outputs.python-version }}
       id: composite-setup-python
       run: |
-        if [[ -n "${{ steps.composite-setup-python-explicit.outputs.python-version }}" ]]; then
-          echo "python-version=${{ steps.composite-setup-python-explicit.outputs.python-version }}" >> $GITHUB_OUTPUT;
-        else
-          echo "python-version=${{ steps.composite-setup-python-file.outputs.python-version }}" >> $GITHUB_OUTPUT;
-        fi
+        echo "cache-hit=${OUTPUT_CACHE_HIT}" >> $GITHUB_OUTPUT;
+        echo "python-path=${OUTPUT_PYTHON_PATH}" >> $GITHUB_OUTPUT;
+        echo "python-version=${OUTPUT_PYTHON_VERSION}" >> $GITHUB_OUTPUT;
       shell: bash
-    - id: composite-python-venv-cache
-      uses: actions/cache@v4.0.2
-      with:
-        path: .venv
-        key: venv-${{ runner.os }}-${{ steps.composite-setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}${{ inputs.cache-key-suffix }}
     - name: Check pyproject.toml & poetry.lock
       if: inputs.poetry-check == 'true'
       env:
