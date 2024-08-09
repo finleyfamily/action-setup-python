@@ -1,5 +1,8 @@
 # action-setup-python
 
+[![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit)](https://github.com/pre-commit/pre-commit)
+[![renovate](https://img.shields.io/badge/enabled-brightgreen?logo=renovatebot&logoColor=%2373afae&label=renovate)](https://developer.mend.io/github/finlyfamily/action-setup-python)
+
 A composite GitHub Action that sets up both Python and [poetry] with virtual environment caching in a single step.
 
 This Action was started because I found myself repeating the same steps over and over again across jobs.
