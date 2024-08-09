@@ -1,4 +1,4 @@
-name: on push
+name: CI
 
 on:
   pull_request:  # any pull request
@@ -24,16 +24,9 @@ jobs:
         with:
           scandir: ./scripts
   spellcheck:
-    # There is an official action published by cSpell.
-    # v1.1.1 was tested but did not function as desired so we are using the CLI.
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-      - run: npm ci
-      - run: make spellcheck
+    uses: finleyfamily/workflows/.github/workflows/spellcheck.yml@master
+    with:
+      node-version: '20'
   test-local-action:
     name: Test Local Action
     runs-on: ubuntu-latest

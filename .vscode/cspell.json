@@ -1,8 +1,5 @@
 {
     "allowCompoundWords": true,
-    "ignorePaths": [
-        ".github/labels.yml"
-    ],
     "import": [
         "@itprokyle/cspell-dict/cspell-ext.json"
     ],

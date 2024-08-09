@@ -1,37 +1,19 @@
 # https://github.com/release-drafter/release-drafter
-autolabeler:  # cspell:ignore autolabeler
+autolabeler:
   - label: bug
     branch: [/^(bug|bugfix|fix|hotfix)\/.*/]
   - label: changelog:skip
-    branch: [/^(dependabot)\/.*/]
+    branch: [/^(dependabot)\/.*/, /^pre-commit-ci-update-config/, /^renovate\/.*lockfile/]
   - label: dependencies
-    branch: [/^(depend|dependabot|renovate)\/.*/]
+    branch: [/^(depend|dependabot|renovate)\/.*/, /^pre-commit-ci-update-config/]
   - label: documentation
     branch: [/^(docs)\/.*/]
   - label: feature
     branch: [/^(enhancement|feat|feature)\/.*/]
-  - label: github_actions
-    files:
-      - .github/workflows/*.yml
-  - label: javascript
-    files:
-      - '**/*.js'
-      - '**/package-lock.json'
-      - '**/package.json'
   - label: maintenance
-    branch: [/^(chore|maint|maintain|maintenance)\/.*/]
+    branch: [/^(chore|maint|maintain|maintenance)\/.*/, /^pre-commit-ci-update-config/]
   - label: changelog:patch
     branch: [/^(bug|bugfix|fix|hotfix)\/.*/]
-  - label: poetry
-    files:
-      - poetry.lock
-      - poetry.toml
-      - pyproject.toml
-  - label: python
-    files:
-      - '**/*.py'
-      - poetry.lock
-      - pyproject.toml
   - label: release
     branch: [/^(release)\/.*/]
 categories:
@@ -54,6 +36,9 @@ category-template: >-
   ### $TITLE
 change-template: '- $TITLE @$AUTHOR (#$NUMBER)'
 commitish: master  # cspell:ignore commitish
+exclude-contributors:
+  - dependabot
+  - renovate
 exclude-labels:
   - changelog:skip
   - release

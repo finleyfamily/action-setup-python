@@ -43,7 +43,7 @@ Since Actions don't currently support YAML anchors, this was my next best option
 ```yaml
 steps:
   - uses: actions/checkout@v2
-  - uses: ITProKyle/action-setup-python@v1.0.0 # it is HIGHLY recommended to pin this to a release
+  - uses: finleyfamily/action-setup-python@v1.0.0 # it is HIGHLY recommended to pin this to a release
     with:
       python-version: 3.9
 ```
