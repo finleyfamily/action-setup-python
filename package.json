@@ -1,6 +1,6 @@
 {
   "devDependencies": {
-    "@itprokyle/cspell-dict": "^1.2.5",
+    "@itprokyle/cspell-dict": "^1.2.6",
     "cspell": "^8.14.2"
   },
   "name": "action-setup-python",
