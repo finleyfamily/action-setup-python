@@ -29,12 +29,17 @@ case "${INPUT_POETRY_VERSION}" in
     ;;
 esac
 
-poetry config virtualenvs.create true
-poetry config virtualenvs.in-project true
-poetry config virtualenvs.prefer-active-python true
+poetry config virtualenvs.create true;
+poetry config virtualenvs.in-project true;
+
+__POETRY_VERSION="$(poetry --version | sed -E 's/.*([*-9+]\.[0-9]+\.[0-9+]([\.\-][^\s])?)\)?.*/\1/gm;t')"
+__POETRY_VERSION_1_PATTERN="^1\..*"
+if [[ "${__POETRY_VERSION}" =~ ${__POETRY_VERSION_1_PATTERN} ]]; then
+  poetry config virtualenvs.prefer-active-python true;
+  poetry config warnings.export false;
+fi
 
 pipx inject poetry poetry-plugin-export;
-poetry config warnings.export false;
 
 for plugin in ${INPUT_POETRY_PLUGINS}; do
   pipx inject poetry "${plugin}";
