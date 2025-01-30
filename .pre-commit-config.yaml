@@ -38,7 +38,7 @@ repos:
       - id: mixed-line-ending
         args: [--fix=lf]
   - repo: https://github.com/ITProKyle/pre-commit-hook-yamlfmt
-    rev: v0.3.1
+    rev: v0.3.2
     hooks:
       - id: yamlfmt
         args: [--mapping, '2', --offset, '2', --sequence, '4']
@@ -62,6 +62,6 @@ repos:
           - mdformat-gfm-alerts
           - mdformat-toc
   - repo: https://github.com/igorshubovych/markdownlint-cli
-    rev: v0.43.0
+    rev: v0.44.0
     hooks:
       - id: markdownlint
