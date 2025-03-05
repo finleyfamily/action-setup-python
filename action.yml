@@ -130,10 +130,17 @@ runs:
         POETRY_INSTALL_ARGS: ${{ inputs.poetry-install-args }}
         POETRY_INSTALL_CMD: ${{ inputs.poetry-install-cmd }}
       run: |
-        if [[ -f "Makefile" ]] && grep -q 'setup-poetry:' Makefile; then
-          echo "installing project using Makefile...";
+        MAKEFILE_LIST=();
+        if [[ -f "Makefile" ]]; then
+          MAKEFILE_LIST="$(make -rpn | sed -n -e '/^$/ { n ; /^[^ .#][^ ]*:/ { s/:.*$// ; p ; } ; }')"
+        fi
+
+        if [[ " ${MAKEFILE_LIST[*]} " =~ setup-poetry ]]; then
           make setup-poetry;
+        elif [[ " ${MAKEFILE_LIST[*]} " =~ setup.poetry ]]; then
+          make setup.poetry;
         else
+          echo "installing python dependencies using default command...";
           ${POETRY_INSTALL_CMD} ${POETRY_INSTALL_ARGS};
         fi
       shell: bash
