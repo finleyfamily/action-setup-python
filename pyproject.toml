@@ -17,4 +17,4 @@ overrides.project.first = ["name", "version"]
 
 [build-system]
 build-backend = "poetry.core.masonry.api"
-requires = ["poetry-core>=2"]
+requires = ["poetry-core>=2.1.1"]
