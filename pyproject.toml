@@ -1,9 +1,4 @@
 [tool.poetry]
-name = "action-setup-python"
-version = "0.0.0"
-authors = ["Kyle Finley <kyle@finley.sh>"]
-description = "A composite action for setting up python."
-license = "Apache-2.0"
 package-mode = false
 
 [tool.poetry.dependencies]
@@ -15,12 +10,11 @@ pre-commit = "^4.1.0"
 [tool.tomlsort]
 all = true
 in_place = true
-sort_first = ["tool", "tool.poetry"]
+sort_first = ["project", "tool", "tool.poetry"]
 spaces_before_inline_comment = 2
 trailing_comma_inline_array = true
-overrides."tool.poetry".first = ["name", "version"]
-overrides."tool.poetry.dependencies".first = ["python"]
+overrides.project.first = ["name", "version"]
 
 [build-system]
 build-backend = "poetry.core.masonry.api"
-requires = ["poetry-core>=2.1.1"]
+requires = ["poetry-core>=2"]
