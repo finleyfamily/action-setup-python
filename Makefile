@@ -2,7 +2,7 @@ CI := $(if $(CI),yes,no)
 SHELL := /bin/bash
 
 ifeq ($(CI), yes)
-	POETRY_OPTS = "-v"
+	POETRY_OPTS = --ansi -v
 	PRE_COMMIT_OPTS = --show-diff-on-failure --verbose
 endif
 
@@ -43,15 +43,15 @@ run-pre-commit: ## run pre-commit for all files
 		--all-files \
 		--color always
 
-setup: setup-poetry setup-pre-commit setup-npm ## setup local dev environment
+setup: setup.poetry setup.pre-commit setup-npm ## setup local dev environment
 
 setup-npm: ## install node dependencies
 	@npm ci
 
-setup-poetry: ## setup python virtual environment
-	@poetry install $(POETRY_OPTS) --sync
+setup.poetry: ## setup python virtual environment
+	@poetry sync $(POETRY_OPTS)
 
-setup-pre-commit: ## install pre-commit git hooks
+setup.pre-commit: ## install pre-commit git hooks
 	@poetry run pre-commit install
 
 spellcheck: ## run cspell
