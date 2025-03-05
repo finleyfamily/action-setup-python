@@ -18,7 +18,7 @@ inputs:
       The poetry command to run when checking the lock file (e.g. `check`).
       This command was changed in poetry 1.6 (default used by this action).
       To support older versions of poetry, provide a value for this input.
-    default: check
+    default: 'check --ansi'
     required: false
   poetry-install:
     description: Whether to run `poetry install`.
@@ -26,7 +26,7 @@ inputs:
     default: true
   poetry-install-args:
     description: Additional args to pass to `poetry install`.
-    default: '-v --sync'
+    default: '--ansi -v --sync'
     required: false
   poetry-install-cmd:
     description: |
