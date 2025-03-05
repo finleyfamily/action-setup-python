@@ -23,4 +23,4 @@ overrides."tool.poetry.dependencies".first = ["python"]
 
 [build-system]
 build-backend = "poetry.core.masonry.api"
-requires = ["poetry-core>=1.9.1"]
+requires = ["poetry-core>=2.1.1"]
