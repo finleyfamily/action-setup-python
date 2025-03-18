@@ -5,7 +5,7 @@ package-mode = false
 python = "^3.9"
 
 [tool.poetry.group.dev.dependencies]
-pre-commit = "^4.1.0"
+pre-commit = "^4.2.0"
 
 [tool.tomlsort]
 all = true
