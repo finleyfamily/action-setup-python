@@ -11,9 +11,9 @@ help: ## show this message
 		'BEGIN {FS = ":.*##"; printf "\nUsage: make \033[36m<target>\033[0m\n"} /^[a-zA-Z_-]+:.*?##/ { printf "  \033[36m%-30s\033[0m %s\n", $$1, $$2 } /^##@/ { printf "\n\033[1m%s\033[0m\n", substr($$0, 5) }' \
 		$(MAKEFILE_LIST)
 
-fix: run-pre-commit ## run all automatic fixes
+fix: run.pre-commit ## run all automatic fixes
 
-fix-md: ## automatically fix markdown files
+fix.md: ## automatically fix markdown files
 	@poetry run pre-commit run mdformat --all-files
 
 lint: ## run all linters
@@ -22,11 +22,11 @@ lint: ## run all linters
 		echo "skipped linters that have dedicated jobs"; \
 	else \
 		echo ""; \
-		$(MAKE) --no-print-directory lint-shellcheck; \
+		$(MAKE) --no-print-directory lint.shellcheck; \
 	fi
 
 # cspell:ignore EPEL
-lint-shellcheck: ## lint shell scripts using shellcheck
+lint.shellcheck: ## lint shell scripts using shellcheck
 	@echo "Running shellcheck..."
 	@if [ -z "$(command -v shellcheck)" ]; then \
 		find ./scripts -name "*.sh" -type f -print0 | xargs -0r shellcheck; \
@@ -38,14 +38,14 @@ lint-shellcheck: ## lint shell scripts using shellcheck
 	fi;
 	@echo ""
 
-run-pre-commit: ## run pre-commit for all files
+run.pre-commit: ## run pre-commit for all files
 	@poetry run pre-commit run $(PRE_COMMIT_OPTS) \
 		--all-files \
 		--color always
 
-setup: setup.poetry setup.pre-commit setup-npm ## setup local dev environment
+setup: setup.poetry setup.pre-commit setup.npm ## setup local dev environment
 
-setup-npm: ## install node dependencies
+setup.npm: ## install node dependencies
 	@npm ci
 
 setup.poetry: ## setup python virtual environment
