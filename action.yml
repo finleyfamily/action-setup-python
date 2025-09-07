@@ -92,7 +92,7 @@ runs:
     - name: Setup python (explicit)
       id: composite-setup-python-explicit
       if: inputs.python-version != ''
-      uses: actions/setup-python@v5
+      uses: actions/setup-python@v6
       with:
         architecture: ${{ inputs.architecture }}
         cache: poetry
@@ -101,7 +101,7 @@ runs:
     - name: Setup python (implicit / file)
       id: composite-setup-python-file
       if: inputs.python-version == ''
-      uses: actions/setup-python@v5
+      uses: actions/setup-python@v6
       with:
         architecture: ${{ inputs.architecture }}
         cache: poetry
