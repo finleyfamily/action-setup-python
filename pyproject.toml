@@ -10,10 +10,10 @@ pre-commit = "^4.3.0"
 [tool.tomlsort]
 all = true
 in_place = true
+overrides.project.first = ["name", "version"]
 sort_first = ["project", "tool", "tool.poetry"]
 spaces_before_inline_comment = 2
 trailing_comma_inline_array = true
-overrides.project.first = ["name", "version"]
 
 [build-system]
 build-backend = "poetry.core.masonry.api"
